@@ -1,0 +1,3400 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Cadastro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos gerais */
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --accent-color: #4cc9f0;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #4CAF50;
+            --danger-color: #f44336;
+            --warning-color: #ff9800;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+            --input-border-radius: 6px;
+            --dot-size: 2px;
+            --dot-space: 22px;
+            --plus-color: rgba(0, 0, 0, 0.08);
+            --plus-size: 20px;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: white;
+            color: var(--dark-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 40px 0;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c7d2fe' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            z-index: -1;
+        }
+        
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+        
+        /* Remover o padrão de fundo com plus signs */
+        .container::before {
+            display: none;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        header h1 {
+            color: var(--primary-color);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            color: #555;
+            font-size: 1.1rem;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-color), var(--accent-color));
+            border-radius: var(--border-radius) 0 0 var(--border-radius);
+        }
+        
+        .card h2 {
+            color: var(--secondary-color);
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eaeaea;
+            font-size: 1.5rem;
+            position: relative;
+            padding-left: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-left: -10px;
+            margin-right: -10px;
+        }
+        
+        .form-col {
+            flex: 1;
+            padding: 0 10px;
+            min-width: 200px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #1e293b;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="date"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--input-border-radius);
+            font-size: 16px;
+            transition: all 0.3s;
+            background-color: white;
+            color: #1e293b;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+        }
+        
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        input[type="date"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.15);
+            background-color: white;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 5px;
+        }
+        
+        .radio-item, .checkbox-item {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 10px 18px;
+            border-radius: 20px;
+            background-color: #f8f9fa;
+            transition: all 0.3s;
+            color: #333;
+            border: 1px solid #e0e0e0;
+            font-weight: 500;
+        }
+        
+        .radio-item:hover, .checkbox-item:hover {
+            background-color: #eef2ff;
+            border-color: #c7d2fe;
+        }
+        
+        .radio-item input:checked + span, 
+        .checkbox-item input:checked + span {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .radio-item input, .checkbox-item input {
+            margin-right: 8px;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+        }
+        
+        .button {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 14px 28px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-block;
+            text-align: center;
+            font-weight: 600;
+            margin-right: 10px;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+            letter-spacing: 0.5px;
+        }
+        
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+        }
+        
+        .button-secondary {
+            background: linear-gradient(135deg, #64748b, #475569);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 14px 28px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-block;
+            text-align: center;
+            font-weight: 600;
+            margin-right: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .button-secondary:hover {
+            background: #eef2ff;
+            color: var(--primary-color);
+            border-color: #c7d2fe;
+        }
+        
+        .conditional-section {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8fafc;
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--accent-color);
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .conditional-section.active {
+            display: block;
+        }
+        
+        .progress-container {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: white;
+            padding: 20px 0 35px;
+            box-shadow: 0 8px 15px -5px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: #f0f4ff;
+            border-radius: 30px;
+            margin: 0 auto;
+            max-width: 85%;
+            overflow: visible;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: width 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            border-radius: 30px;
+            position: relative;
+        }
+        
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            max-width: 85%;
+            margin: 0 auto;
+            position: relative;
+            padding: 0;
+            list-style: none;
+            margin-top: -14px;
+            margin-bottom: 8px;
+        }
+        
+        .progress-step {
+            width: 28px;
+            height: 28px;
+            background-color: #f0f4ff;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            z-index: 2;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .progress-step.active {
+            background-color: var(--primary-color);
+            transform: scale(1.15);
+        }
+        
+        .progress-step.completed {
+            background-color: var(--accent-color);
+        }
+        
+        .progress-step-label {
+            position: absolute;
+            top: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #6b7280;
+            font-size: 13px;
+            font-weight: 500;
+            white-space: nowrap;
+            opacity: 0.9;
+            transition: all 0.3s ease;
+        }
+        
+        .progress-step.active .progress-step-label {
+            opacity: 1;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .progress-step.completed .progress-step-label {
+            color: var(--accent-color);
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eaeaea;
+        }
+        
+        .child-section {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f8fafc;
+            border-radius: var(--border-radius);
+            border: 1px solid #e2e8f0;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+        
+        .child-section:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .child-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 0;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .card {
+                padding: 20px 15px;
+                margin-bottom: 20px;
+            }
+            
+            .form-col {
+                flex: 100%;
+                margin-bottom: 15px;
+                min-width: unset;
+            }
+            
+            .form-actions {
+                flex-direction: column-reverse;
+                gap: 15px;
+            }
+            
+            .button {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 10px;
+                padding: 12px 20px;
+                font-size: 15px;
+            }
+            
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 0.95rem;
+            }
+            
+            .radio-group, .checkbox-group {
+                gap: 8px;
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .radio-item, .checkbox-item {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            
+            /* Ajuste da barra de progresso para mobile */
+            .progress-container {
+                padding: 15px 0 30px;
+                margin-bottom: 20px;
+            }
+            
+            .progress-bar {
+                max-width: 90%;
+            }
+            
+            .progress-steps {
+                max-width: 90%;
+            }
+            
+            .progress-step {
+                width: 24px;
+                height: 24px;
+            }
+            
+            .progress-step-label {
+                font-size: 11px;
+            }
+            
+            /* Ajuste dos inputs */
+            input[type="text"],
+            input[type="email"],
+            input[type="tel"],
+            input[type="date"],
+            input[type="number"],
+            select,
+            textarea {
+                padding: 10px 12px;
+                font-size: 15px;
+            }
+            
+            label {
+                font-size: 14px;
+                margin-bottom: 6px;
+            }
+            
+            .card h2 {
+                font-size: 1.3rem;
+                margin-bottom: 20px;
+            }
+            
+            /* Ajuste do modal de sucesso */
+            .success-modal-content {
+                width: 95%;
+            }
+            
+            .success-modal-header {
+                padding: 15px;
+            }
+            
+            .success-modal-icon {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .success-modal-title {
+                font-size: 18px;
+            }
+            
+            .success-modal-body {
+                padding: 15px;
+            }
+            
+            /* Input de data ajustado para mobile */
+            input[type="date"] {
+                -webkit-appearance: none;
+                appearance: none;
+                position: relative;
+            }
+            
+            /* Ajuste para telas muito pequenas */
+            @media (max-width: 380px) {
+                .card {
+                    padding: 15px 12px;
+                }
+                
+                header h1 {
+                    font-size: 1.6rem;
+                }
+                
+                .progress-step {
+                    width: 20px;
+                    height: 20px;
+                }
+                
+                .progress-step-label {
+                    font-size: 10px;
+                }
+                
+                /* Ajuste para botões */
+                .submit-container {
+                    flex-direction: column;
+                    align-items: stretch;
+                }
+                
+                .error-banner {
+                    margin-left: 0;
+                    margin-top: 10px;
+                }
+            }
+        }
+        
+        /* Estilos para o modal de sucesso */
+        .success-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .success-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .success-modal-content {
+            background: white;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 400px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+        
+        .success-modal.show .success-modal-content {
+            transform: scale(1);
+        }
+        
+        .success-modal-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .success-modal-icon {
+            width: 60px;
+            height: 60px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 5px;
+        }
+        
+        .success-modal-icon svg {
+            width: 35px;
+            height: 35px;
+            fill: var(--primary-color);
+            stroke: var(--primary-color);
+        }
+        
+        .success-modal-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin: 0;
+            text-align: center;
+        }
+        
+        .success-modal-body {
+            padding: 20px 25px;
+            color: #4a5568;
+            font-size: 15px;
+        }
+        
+        .success-modal-message {
+            margin-bottom: 15px;
+            text-align: center;
+            line-height: 1.5;
+        }
+        
+        .success-modal-response {
+            background-color: #f8fafc;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #718096;
+            max-height: 100px;
+            overflow-y: auto;
+            font-family: monospace;
+            white-space: pre-wrap;
+            margin-bottom: 15px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .success-modal-footer {
+            padding: 15px 25px;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .success-modal-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 15px;
+            min-width: 120px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            text-align: center;
+        }
+        
+        .success-modal-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .success-modal-btn-secondary {
+            background: #fff;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+        
+        .success-modal-btn-secondary:hover {
+            background: #f8f9fa;
+            color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        @keyframes checkmark {
+            0% { stroke-dashoffset: 100; }
+            100% { stroke-dashoffset: 0; }
+        }
+        
+        .checkmark {
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            animation: checkmark 1s ease-in-out forwards;
+            stroke-width: 4;
+            stroke: var(--primary-color);
+        }
+        
+        /* Estilos para mensagens de erro */
+        .error-message {
+            color: #e53e3e;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        /* Redesign do aviso de erro - versão minimalista */
+        .error-banner {
+            color: #e53e3e;
+            display: none;
+            font-weight: 500;
+            font-size: 14px;
+            animation: fadeIn 0.3s ease;
+            flex: 1;
+            margin-left: 15px;
+            align-items: center;
+        }
+        
+        .error-banner.show {
+            display: flex;
+            gap: 6px;
+        }
+        
+        .error-icon {
+            flex-shrink: 0;
+            color: #e53e3e;
+            width: 16px;
+            height: 16px;
+        }
+        
+        #error-title {
+            font-weight: 600;
+        }
+        
+        #error-details {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        
+        .invalid-input {
+            border-color: #e53e3e !important;
+            background-color: #FFF5F5 !important;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        .section-error {
+            color: #e53e3e;
+            font-weight: 600;
+            padding: 8px 0;
+            font-size: 15px;
+        }
+        
+        /* Estilos para tooltip de erro */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #e53e3e;
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 13px;
+            pointer-events: none;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #e53e3e transparent transparent transparent;
+        }
+        
+        .tooltip.show .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Estilo para o indicador de carregamento */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .loading-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .loading-spinner {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        #fill-form {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Formulário de Cadastro</h1>
+            <p class="subtitle">Preencha as informações abaixo para completar seu cadastro</p>
+        </header>
+        
+        <div class="progress-container" id="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <ul class="progress-steps">
+                <li class="progress-step" id="step-1">
+                    <span class="progress-step-label">Pessoal</span>
+                </li>
+                <li class="progress-step" id="step-2">
+                    <span class="progress-step-label">Cônjuge</span>
+                </li>
+                <li class="progress-step" id="step-3">
+                    <span class="progress-step-label">Filhos</span>
+                </li>
+                <li class="progress-step" id="step-4">
+                    <span class="progress-step-label">Financeiro</span>
+                </li>
+            </ul>
+        </div>
+        
+        <form id="registration-form">
+            <!-- Informações Pessoais -->
+            <div class="card">
+                <h2>Informações Pessoais</h2>
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="name">Nome Completo*</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="phone">Telefone*</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="email">Email*</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="profession">Profissão*</label>
+                            <input type="text" id="profession" name="profession" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="birthdate">Data de Nascimento*</label>
+                            <input type="date" id="birthdate" name="birthdate" required>
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label>Status de Documentação*</label>
+                            <div class="radio-group">
+                                <label class="radio-item">
+                                    <input type="radio" name="work_permit" value="work_permit"> <span>Work Permit</span>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="work_permit" value="green_card"> <span>Green Card</span>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="work_permit" value="citizen"> <span>Cidadão</span>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="work_permit" value="undocumented"> <span>Sem documento</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="time_in_usa">Há quanto tempo está nos EUA?</label>
+                            <input type="text" id="time_in_usa" name="time_in_usa">
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="previous_city_brazil">Onde morava no Brasil?</label>
+                            <input type="text" id="previous_city_brazil" name="previous_city_brazil">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="previous_profession_brazil">Trabalhava com o que no Brasil?</label>
+                            <input type="text" id="previous_profession_brazil" name="previous_profession_brazil">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Informações do Cônjuge -->
+            <div class="card">
+                <h2>Informações do Cônjuge</h2>
+                <div class="form-group">
+                    <label>Possui Cônjuge?*</label>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="has_spouse" value="yes" id="has-spouse-yes"> <span>Sim</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="has_spouse" value="no" id="has-spouse-no"> <span>Não</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div id="spouse-section" class="conditional-section">
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="spouse_name">Nome do Cônjuge</label>
+                                <input type="text" id="spouse_name" name="spouse_name">
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="spouse_birthdate">Data de Nascimento do Cônjuge</label>
+                                <input type="date" id="spouse_birthdate" name="spouse_birthdate">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="spouse_profession">Profissão do Cônjuge</label>
+                                <input type="text" id="spouse_profession" name="spouse_profession">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="spouse_comments">Comentários (opcional)</label>
+                                <textarea id="spouse_comments" name="spouse_comments" rows="3" placeholder="Informações adicionais sobre o cônjuge"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Informações dos Filhos -->
+            <div class="card">
+                <h2>Informações dos Filhos</h2>
+                <div class="form-group">
+                    <label>Possui Filhos?*</label>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="has_children" value="yes" id="has-children-yes"> <span>Sim</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="has_children" value="no" id="has-children-no"> <span>Não</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="conditional-section" id="children-section">
+                    <div class="form-group">
+                        <label for="children_count">Quantos filhos?</label>
+                        <select id="children_count" name="children_count" class="form-select">
+                            <option value="1">1 filho</option>
+                            <option value="2">2 filhos</option>
+                            <option value="3">3 filhos</option>
+                            <option value="4">4 filhos</option>
+                            <option value="5">5 filhos</option>
+                        </select>
+                    </div>
+                    
+                    <div id="children-details">
+                        <!-- Child forms will be added here dynamically -->
+                        <div class="child-section">
+                            <h3>Filho 1</h3>
+                            <div class="form-row">
+                                <div class="form-col">
+                                    <div class="form-group">
+                                        <label for="child_name_1">Nome do Filho</label>
+                                        <input type="text" id="child_name_1" name="child_name_1">
+                                    </div>
+                                </div>
+                                <div class="form-col">
+                                    <div class="form-group">
+                                        <label for="child_birthdate_1">Data de Nascimento</label>
+                                        <input type="date" id="child_birthdate_1" name="child_birthdate_1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-col">
+                                    <div class="form-group">
+                                        <label for="child_comments_1">Comentários (opcional)</label>
+                                        <textarea id="child_comments_1" name="child_comments_1" rows="2" placeholder="Informações adicionais sobre este filho"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Informações Financeiras -->
+            <div class="card">
+                <h2>Informações Financeiras</h2>
+                        <div class="form-group">
+                            <label>Possui algum seguro?*</label>
+                            <div class="radio-group">
+                                <label class="radio-item">
+                            <input type="radio" name="has_insurance" value="yes" id="has-insurance-yes"> <span>Sim</span>
+                                </label>
+                                <label class="radio-item">
+                            <input type="radio" name="has_insurance" value="no" id="has-insurance-no"> <span>Não</span>
+                                </label>
+                    </div>
+                </div>
+                
+                <div class="conditional-section" id="insurance-section">
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="insurance_type">Tipo de seguro</label>
+                                <input type="text" id="insurance_type" name="insurance_type">
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="insurance_coverage">Cobertura atual</label>
+                                <input type="text" id="insurance_coverage" name="insurance_coverage" class="currency-input" placeholder="$0.00">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label>Possui Aposentadoria?*</label>
+                            <div class="radio-group">
+                                <label class="radio-item">
+                                    <input type="radio" name="has_retirement" value="yes" id="has-retirement-yes"> <span>Sim</span>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="has_retirement" value="no" id="has-retirement-no"> <span>Não</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="conditional-section" id="retirement-section">
+                    <div class="form-group">
+                        <label>Qual tipo de aposentadoria?</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="retirement_type" value="401k"> <span>401K</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="retirement_type" value="ira"> <span>IRA</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="retirement_type" value="roth_ira"> <span>Roth IRA</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>O que é mais importante para você?*</label>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="priority" value="security"> <span>Segurança</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="priority" value="retirement"> <span>Aposentadoria</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="priority" value="both"> <span>Ambos</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Quem gera mais Renda na casa?*</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="income_generator" value="client" id="income-generator-client"> <span>Cliente</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="income_generator" value="spouse" id="income-generator-spouse"> <span>Cônjuge</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="client_income_percentage">Qual percentual de cada um? - Cliente (%)*</label>
+                            <input type="text" id="client_income_percentage" name="client_income_percentage" required placeholder="Ex: 60">
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="spouse_income_percentage">Qual percentual de cada um? - Cônjuge (%)*</label>
+                            <input type="text" id="spouse_income_percentage" name="spouse_income_percentage" required placeholder="Ex: 40">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Possui investimento?*</label>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="has_investment" value="yes" id="has-investment-yes"> <span>Sim</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="has_investment" value="no" id="has-investment-no"> <span>Não</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="conditional-section" id="investment-section">
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="investment_type">Tipo de investimento</label>
+                                <input type="text" id="investment_type" name="investment_type">
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="investment_value">Valor investido</label>
+                                <input type="text" id="investment_value" name="investment_value" class="currency-input" placeholder="$0.00">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Quanto tempo conseguem sobreviver com o que tem guardado, caso não consiga trabalhar?*</label>
+                    <select id="survival_time" name="survival_time" class="form-select">
+                        <option value="">Selecione uma opção</option>
+                        <option value="1month">1 mês</option>
+                        <option value="6months">6 meses</option>
+                        <option value="1year">1 ano</option>
+                        <option value="no_problem">Não teremos problemas</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Tem casa própria ou alugada?*</label>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="house_status" value="own" id="house-own"> <span>Própria</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="house_status" value="rent" id="house-rent"> <span>Alugada</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="conditional-section" id="mortgage-section">
+                    <div class="form-group">
+                        <label>Tem mortgage em aberto?*</label>
+                        <div class="radio-group">
+                            <label class="radio-item">
+                                <input type="radio" name="has_mortgage" value="yes" id="has-mortgage-yes"> <span>Sim</span>
+                            </label>
+                            <label class="radio-item">
+                                <input type="radio" name="has_mortgage" value="no" id="has-mortgage-no"> <span>Não</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="conditional-section" id="mortgage-value-section">
+                        <div class="form-group">
+                            <label for="mortgage_value">Valor do mortgage</label>
+                            <input type="text" id="mortgage_value" name="mortgage_value" class="currency-input" placeholder="$0.00">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="monthly_expense">Despesa mensal estimada</label>
+                            <input type="text" id="monthly_expense" name="monthly_expense" class="currency-input" placeholder="$0.00">
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="monthly_income">Renda mensal estimada</label>
+                            <input type="text" id="monthly_income" name="monthly_income" class="currency-input" placeholder="$0.00">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="meeting_comments">Comentários sobre a reunião</label>
+                    <textarea id="meeting_comments" name="meeting_comments" rows="3" placeholder="Comentários sobre a reunião"></textarea>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="button" class="button button-secondary" id="reset-form">Limpar Formulário</button>
+                <div class="submit-container" style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <button type="button" class="button" id="fill-form">Preencher Aplicação</button>
+                    <button type="submit" class="button">Enviar Formulário</button>
+                    <div class="error-banner" id="form-error-banner">
+                        <svg class="error-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div>
+                            <span id="error-title">Informações incompletas.</span>
+                            <div id="error-details"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <div id="success-modal" class="success-modal">
+        <div class="success-modal-content">
+            <div class="success-modal-header">
+                <div class="success-modal-icon">
+                    <svg viewBox="0 0 52 52">
+                        <circle cx="26" cy="26" r="25" fill="none" />
+                        <path class="checkmark" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                    </svg>
+                </div>
+                <h3 class="success-modal-title">Enviado com Sucesso!</h3>
+            </div>
+            <div class="success-modal-body">
+                <p class="success-modal-message">
+                    Seus dados foram recebidos com sucesso!<br>
+                    Em breve, um de nossos consultores entrará em contato.
+                </p>
+                <!-- Resposta técnica oculta, apenas para debug -->
+                <div class="success-modal-response" id="modal-response-text" style="display: none;"></div>
+            </div>
+            <div class="success-modal-footer">
+                <button class="success-modal-btn" id="success-modal-close">OK</button>
+                <a href="https://call.witkafinancialgroup.com/widget/groups/wfgfinancial-calendarios" class="success-modal-btn success-modal-btn-secondary" id="schedule-btn">Realizar Agendamento</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos
+            const form = document.getElementById('registration-form');
+            const progressFill = document.getElementById('progress-fill');
+            const resetButton = document.getElementById('reset-form');
+            
+            // Seção de cônjuge
+            const hasSpouseYes = document.getElementById('has-spouse-yes');
+            const hasSpouseNo = document.getElementById('has-spouse-no');
+            const spouseSection = document.getElementById('spouse-section');
+            
+            // Seção de filhos
+            const hasChildrenYes = document.getElementById('has-children-yes');
+            const hasChildrenNo = document.getElementById('has-children-no');
+            const childrenSection = document.getElementById('children-section');
+            const childrenCount = document.getElementById('children_count');
+            const childrenDetails = document.getElementById('children-details');
+            
+            // Seção de aposentadoria
+            const hasRetirementYes = document.getElementById('has-retirement-yes');
+            const hasRetirementNo = document.getElementById('has-retirement-no');
+            const retirementSection = document.getElementById('retirement-section');
+            
+            // Novas seções condicionais
+            const hasInvestmentYes = document.getElementById('has-investment-yes');
+            const hasInvestmentNo = document.getElementById('has-investment-no');
+            const investmentSection = document.getElementById('investment-section');
+            
+            const hasInsuranceYes = document.getElementById('has-insurance-yes');
+            const hasInsuranceNo = document.getElementById('has-insurance-no');
+            const insuranceSection = document.getElementById('insurance-section');
+            
+            const houseOwn = document.getElementById('house-own');
+            const houseRent = document.getElementById('house-rent');
+            const mortgageSection = document.getElementById('mortgage-section');
+            
+            // URL do webhook
+            const webhookUrl = 'https://hook.us1.make.com/ftmsdxw68exht2trc33k8incnl8afrds';
+            
+            // Inicializar todas as seções condicionais como ocultas no carregamento da página
+            document.addEventListener('DOMContentLoaded', function() {
+                // Ocultar todas as seções condicionais por padrão
+                const conditionalSections = document.querySelectorAll('.conditional-section');
+                conditionalSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+            });
+            
+            // Função para atualizar os steps da barra de progresso
+            function updateProgressSteps(progress) {
+                const steps = document.querySelectorAll('.progress-step');
+                const progressFill = document.getElementById('progress-fill');
+                
+                // Reseta todos os steps
+                steps.forEach(step => {
+                    step.classList.remove('active', 'completed');
+                });
+                
+                // Atualiza os steps baseado no progresso
+                if (progress >= 0) steps[0].classList.add('active');
+                if (progress >= 40) {
+                    steps[0].classList.remove('active');
+                    steps[0].classList.add('completed');
+                    steps[1].classList.add('active');
+                }
+                if (progress >= 60) {
+                    steps[1].classList.remove('active');
+                    steps[1].classList.add('completed');
+                    steps[2].classList.add('active');
+                }
+                if (progress >= 80) {
+                    steps[2].classList.remove('active');
+                    steps[2].classList.add('completed');
+                    steps[3].classList.add('active');
+                }
+                if (progress >= 100) {
+                    steps[3].classList.remove('active');
+                    steps[3].classList.add('completed');
+                    progressFill.classList.add('active');
+                } else {
+                    progressFill.classList.remove('active');
+                }
+            }
+            
+            // Adiciona efeito ao scrollar para a barra de progresso
+            window.addEventListener('scroll', function() {
+                const progressContainer = document.getElementById('progress-container');
+                if (window.scrollY > 50) {
+                    progressContainer.classList.add('sticky');
+                } else {
+                    progressContainer.classList.remove('sticky');
+                }
+            });
+            
+            // Atualizar barra de progresso
+            function updateProgress() {
+                try {
+                    // Define os pesos para cada seção (para iniciar o progresso desde o começo)
+                    const weights = {
+                        pessoal: 40,  // Primeira seção tem maior peso para iniciar o progresso 
+                        conjuge: 20,
+                        filhos: 20,
+                        financeiro: 20
+                    };
+                    
+                    // Define as seções do formulário
+                    const personalComplete = checkPersonalSection();
+                    const spouseComplete = checkSpouseSection();
+                    const childrenComplete = checkChildrenSection();
+                    const financialComplete = checkFinancialSection();
+                    
+                    // Verifica cada campo da seção pessoal para progresso incremental
+                    const name = document.getElementById('name').value.trim() ? 7 : 0;
+                    const email = document.getElementById('email').value.trim() ? 7 : 0;
+                    const phone = document.getElementById('phone').value.trim() ? 7 : 0;
+                    const profession = document.getElementById('profession').value.trim() ? 7 : 0;
+                    const birthdate = document.getElementById('birthdate').value.trim() ? 6 : 0;
+                    const workPermit = form.querySelector('input[name="work_permit"]:checked') ? 6 : 0;
+                    
+                    // Calcula o progresso parcial para a seção pessoal
+                    const personalPartialProgress = name + email + phone + profession + birthdate + workPermit;
+                    
+                    // Combina progresso completo e parcial
+                    let totalProgress = 0;
+                    
+                    // Adiciona progresso parcial da seção pessoal
+                    totalProgress += (personalComplete ? weights.pessoal : personalPartialProgress);
+                    
+                    // Adiciona progresso das outras seções
+                    totalProgress += (spouseComplete ? weights.conjuge : 0);
+                    totalProgress += (childrenComplete ? weights.filhos : 0);
+                    totalProgress += (financialComplete ? weights.financeiro : 0);
+                    
+                    console.log('Progresso parcial pessoal:', personalPartialProgress);
+                    console.log('Progresso total:', totalProgress);
+                    
+                    // Atualiza a barra de progresso
+                    progressFill.style.width = `${totalProgress}%`;
+                    
+                    // Atualiza os steps da barra
+                    updateProgressSteps(totalProgress);
+                    
+                    // Atualiza o estilo baseado no progresso
+                    updateProgressStyle();
+                } catch (e) {
+                    console.error('Erro ao atualizar progresso:', e);
+                }
+            }
+            
+            // Verifica se a seção de informações pessoais está completa
+            function checkPersonalSection() {
+                try {
+                    const name = document.getElementById('name').value.trim();
+                    const email = document.getElementById('email').value.trim();
+                    const phone = document.getElementById('phone').value.trim();
+                    const profession = document.getElementById('profession').value.trim();
+                    const birthdate = document.getElementById('birthdate').value.trim();
+                    const workPermit = form.querySelector('input[name="work_permit"]:checked');
+                    
+                    // Para debug
+                    console.log('Seção Pessoal:', {name, email, phone, profession, birthdate, workPermit});
+                    
+                    // Retorna true se todos os campos obrigatórios estão preenchidos
+                    return Boolean(name && email && phone && profession && birthdate && workPermit);
+                } catch (e) {
+                    console.error('Erro ao verificar seção pessoal:', e);
+                    return false;
+                }
+            }
+            
+            // Verifica se a seção de cônjuge está completa
+            function checkSpouseSection() {
+                try {
+                    // Se o usuário marcou que não tem cônjuge, a seção está completa
+                    if (hasSpouseNo && hasSpouseNo.checked) return true;
+                    
+                    // Se tem cônjuge, verifica se os campos estão preenchidos
+                    if (hasSpouseYes && hasSpouseYes.checked) {
+                        const spouseName = document.getElementById('spouse_name').value.trim();
+                        // Consideramos a seção completa se pelo menos o nome do cônjuge foi preenchido
+                        return spouseName !== '';
+                    }
+                    
+                    // Se não marcou nem sim nem não, consideramos incompleta
+                    const hasSpouseSelected = hasSpouseYes?.checked || hasSpouseNo?.checked;
+                    return hasSpouseSelected; // Retorna true se pelo menos selecionou sim ou não
+                } catch (e) {
+                    console.error('Erro ao verificar seção cônjuge:', e);
+                    return false;
+                }
+            }
+            
+            // Verifica se a seção de filhos está completa
+            function checkChildrenSection() {
+                try {
+                    // Se o usuário marcou que não tem filhos, a seção está completa
+                    if (hasChildrenNo && hasChildrenNo.checked) return true;
+                    
+                    // Se tem filhos, verifica se selecionou o número e preencheu ao menos o primeiro
+                    if (hasChildrenYes && hasChildrenYes.checked) {
+                        const childCount = parseInt(childrenCount.value) || 0;
+                        
+                        // Se não selecionou quantos filhos, considera incompleta
+                        if (childCount === 0) return false;
+                        
+                        // Verifica o primeiro filho
+                        const firstChildNameInput = document.getElementById('child_name_1');
+                        if (firstChildNameInput) {
+                            const firstChildName = firstChildNameInput.value.trim();
+                            return firstChildName !== '';
+                        }
+                        
+                        // Se não encontrou o input, considera incompleta
+                        return false;
+                    }
+                    
+                    // Se não marcou nem sim nem não, consideramos incompleta
+                    const hasChildrenSelected = hasChildrenYes?.checked || hasChildrenNo?.checked;
+                    return hasChildrenSelected; // Retorna true se pelo menos selecionou sim ou não
+                } catch (e) {
+                    console.error('Erro ao verificar seção filhos:', e);
+                    return false;
+                }
+            }
+            
+            // Verifica se a seção financeira está completa
+            function checkFinancialSection() {
+                try {
+                    let isValid = true; // Adicionando a declaração da variável isValid
+                    
+                    const hasInsurance = form.querySelector('input[name="has_insurance"]:checked');
+                    const hasRetirement = form.querySelector('input[name="has_retirement"]:checked');
+                    const priority = form.querySelector('input[name="priority"]:checked');
+                    
+                    // Novos campos
+                    const incomeGenerators = form.querySelectorAll('input[name="income_generator"]:checked');
+                    const clientIncomePercentage = document.getElementById('client_income_percentage')?.value.trim();
+                    const spouseIncomePercentage = document.getElementById('spouse_income_percentage')?.value.trim();
+                    const hasInvestment = form.querySelector('input[name="has_investment"]:checked');
+                    const survivalTime = document.getElementById('survival_time').value;
+                    const houseStatus = form.querySelector('input[name="house_status"]:checked');
+                    const monthlyExpense = document.getElementById('monthly_expense').value.trim();
+                    const monthlyIncome = document.getElementById('monthly_income').value.trim();
+                    
+                    // Para debug
+                    console.log('Seção Financeira:', {
+                        hasInsurance: hasInsurance?.value,
+                        hasRetirement: hasRetirement?.value,
+                        priority: priority?.value,
+                        incomeGenerators: Array.from(incomeGenerators).map(i => i.value),
+                        clientIncomePercentage,
+                        spouseIncomePercentage,
+                        hasInvestment: hasInvestment?.value,
+                        survivalTime,
+                        houseStatus: houseStatus?.value,
+                        monthlyExpense,
+                        monthlyIncome
+                    });
+                    
+                    // Verifica se respondeu às perguntas principais
+                    if (!hasInsurance || !hasRetirement || !priority || incomeGenerators.length === 0 || 
+                        !clientIncomePercentage || !spouseIncomePercentage ||
+                        !hasInvestment || !survivalTime || !houseStatus || 
+                        !monthlyExpense || !monthlyIncome) return false;
+                    
+                    // Se marcou que tem seguro, verifica se preencheu os campos
+                    if (hasInsuranceYes && hasInsuranceYes.checked) {
+                        const insuranceType = document.getElementById('insurance_type').value.trim();
+                        const insuranceCoverage = document.getElementById('insurance_coverage').value.trim();
+                        if (!insuranceType || !insuranceCoverage) return false;
+                    }
+                    
+                    // Se marcou que tem aposentadoria, verifica se selecionou o tipo
+                    if (hasRetirementYes && hasRetirementYes.checked) {
+                        const retirementTypes = form.querySelectorAll('input[name="retirement_type"]:checked');
+                        if (retirementTypes.length === 0) return false;
+                    }
+                    
+                    // Se marcou que não tem aposentadoria, a seção está completa
+                    return true;
+                } catch (e) {
+                    console.error('Erro ao verificar seção financeira:', e);
+                    return false;
+                }
+            }
+            
+            // Estiliza a barra de progresso
+            progressFill.style.transition = 'width 0.5s ease, background-color 0.5s ease';
+            
+            // Adicionando cores baseadas no progresso
+            function updateProgressStyle() {
+                try {
+                    const width = parseFloat(progressFill.style.width) || 0;
+                    
+                    if (width < 25) {
+                        progressFill.style.background = 'linear-gradient(90deg, #4361ee, #3a0ca3)';
+                    } else if (width < 50) {
+                        progressFill.style.background = 'linear-gradient(90deg, #4361ee, #3a0ca3)';
+                    } else if (width < 75) {
+                        progressFill.style.background = 'linear-gradient(90deg, #4361ee, #3a0ca3)';
+                    } else {
+                        progressFill.style.background = 'linear-gradient(90deg, #4361ee, #3a0ca3)';
+                    }
+                } catch (e) {
+                    console.error('Erro ao atualizar estilo do progresso:', e);
+                }
+            }
+            
+            // Iniciar monitoramento de campos para atualizar progresso
+            const formInputs = form.querySelectorAll('input, select, textarea');
+            formInputs.forEach(input => {
+                input.addEventListener('change', updateProgress);
+                input.addEventListener('input', updateProgress);
+                input.addEventListener('click', updateProgress);
+            });
+            
+            // Monitoramento específico para radio buttons
+            const radioButtons = form.querySelectorAll('input[type="radio"]');
+            radioButtons.forEach(radio => {
+                radio.addEventListener('click', function() {
+                    console.log('Radio button clicado:', this.name, this.value);
+                    setTimeout(updateProgress, 10);
+                });
+            });
+            
+            // Monitorar eventos específicos para cada seção
+            // Seção de cônjuge
+            hasSpouseYes?.addEventListener('change', function() {
+                console.log('Selecionado Has Spouse Yes');
+                setTimeout(updateProgress, 10);
+            });
+            
+            hasSpouseNo?.addEventListener('change', function() {
+                console.log('Selecionado Has Spouse No');
+                setTimeout(updateProgress, 10);
+            });
+            
+            // Seção de filhos
+            hasChildrenYes?.addEventListener('change', function() {
+                console.log('Selecionado Has Children Yes');
+                setTimeout(updateProgress, 10);
+            });
+            
+            hasChildrenNo?.addEventListener('change', function() {
+                console.log('Selecionado Has Children No');
+                setTimeout(updateProgress, 10);
+            });
+            
+            // Seção de casa própria/alugada
+            houseOwn?.addEventListener('change', function() {
+                console.log('Selecionado Casa Própria');
+                if (this.checked) {
+                    mortgageSection.classList.add('active');
+                }
+                setTimeout(updateProgress, 10);
+            });
+            
+            houseRent?.addEventListener('change', function() {
+                console.log('Selecionado Casa Alugada');
+                if (this.checked) {
+                    mortgageSection.classList.remove('active');
+                    // Limpar campos de mortgage
+                    const hasMortgageRadios = form.querySelectorAll('input[name="has_mortgage"]');
+                    hasMortgageRadios.forEach(radio => radio.checked = false);
+                    document.getElementById('mortgage_value').value = '';
+                    document.getElementById('mortgage-value-section').classList.remove('active');
+                }
+                setTimeout(updateProgress, 10);
+            });
+            
+            // Seção de mortgage
+            const hasMortgageYes = document.getElementById('has-mortgage-yes');
+            const hasMortgageNo = document.getElementById('has-mortgage-no');
+            const mortgageValueSection = document.getElementById('mortgage-value-section');
+            
+            hasMortgageYes?.addEventListener('change', function() {
+                console.log('Selecionado Tem Mortgage Sim');
+                if (this.checked) {
+                    mortgageValueSection.classList.add('active');
+                }
+                setTimeout(updateProgress, 10);
+            });
+            
+            hasMortgageNo?.addEventListener('change', function() {
+                console.log('Selecionado Tem Mortgage Não');
+                if (this.checked) {
+                    mortgageValueSection.classList.remove('active');
+                    document.getElementById('mortgage_value').value = '';
+                }
+                setTimeout(updateProgress, 10);
+            });
+            
+            // Seção de aposentadoria
+            hasRetirementYes?.addEventListener('change', function() {
+                if (this.checked) {
+                    retirementSection.style.display = 'block';
+                }
+            });
+            
+            hasRetirementNo?.addEventListener('change', function() {
+                if (this.checked) {
+                    retirementSection.style.display = 'none';
+                }
+            });
+            
+            // Gerenciar a seção de seguro
+            hasInsuranceYes?.addEventListener('change', function() {
+                if (this.checked) {
+                    insuranceSection.style.display = 'block';
+                }
+            });
+            
+            hasInsuranceNo?.addEventListener('change', function() {
+                if (this.checked) {
+                    insuranceSection.style.display = 'none';
+                    
+                    // Limpar campos de seguro
+                    document.getElementById('insurance_type').value = '';
+                    document.getElementById('insurance_coverage').value = '';
+                }
+            });
+            
+            // Gerenciar a seção de investimento
+            hasInvestmentYes?.addEventListener('change', function() {
+                if (this.checked) {
+                    investmentSection.style.display = 'block';
+                }
+            });
+            
+            hasInvestmentNo?.addEventListener('change', function() {
+                if (this.checked) {
+                    investmentSection.style.display = 'none';
+                    
+                    // Limpar campos de investimento
+                    document.getElementById('investment_type').value = '';
+                    document.getElementById('investment_value').value = '';
+                }
+            });
+            
+            // Verificação inicial da barra com pequenos atrasos para garantir que inicialize corretamente
+            setTimeout(updateProgress, 100);
+            setTimeout(updateProgress, 500);
+            
+            // Chamada adicional para eventos de mudança na página
+            window.addEventListener('DOMContentLoaded', updateProgress);
+            window.addEventListener('load', updateProgress);
+            
+            // Gerenciar a seção de cônjuge
+            hasSpouseYes.addEventListener('change', function() {
+                if (this.checked) {
+                    spouseSection.style.display = 'block';
+                }
+            });
+            
+            hasSpouseNo.addEventListener('change', function() {
+                if (this.checked) {
+                    spouseSection.style.display = 'none';
+                    
+                    // Limpar campos do cônjuge
+                    document.getElementById('spouse_name').value = '';
+                    document.getElementById('spouse_birthdate').value = '';
+                    document.getElementById('spouse_profession').value = '';
+                }
+            });
+            
+            // Verificar estado inicial
+            if (hasSpouseNo.checked) {
+                spouseSection.style.display = 'none';
+            }
+            
+            // Gerenciar a seção de filhos
+            hasChildrenYes.addEventListener('change', function() {
+                if (this.checked) {
+                    childrenSection.style.display = 'block';
+                    updateChildrenForms();
+                }
+            });
+            
+            hasChildrenNo.addEventListener('change', function() {
+                if (this.checked) {
+                    childrenSection.style.display = 'none';
+                }
+            });
+            
+            childrenCount.addEventListener('change', updateChildrenForms);
+            
+            function updateChildrenForms() {
+                const count = parseInt(childrenCount.value) || 0;
+                childrenDetails.innerHTML = '';
+                
+                for (let i = 1; i <= count; i++) {
+                    const childSection = document.createElement('div');
+                    childSection.className = 'child-section';
+                    childSection.innerHTML = `
+                        <h3>Filho ${i}</h3>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="child_name_${i}">Nome do Filho</label>
+                                    <input type="text" id="child_name_${i}" name="child_name_${i}">
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="child_birthdate_${i}">Data de Nascimento</label>
+                                    <input type="date" id="child_birthdate_${i}" name="child_birthdate_${i}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="child_comments_${i}">Comentários (opcional)</label>
+                                    <textarea id="child_comments_${i}" name="child_comments_${i}" rows="2" placeholder="Informações adicionais sobre este filho"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    childrenDetails.appendChild(childSection);
+                }
+            }
+            
+            // Gerenciar a seção de aposentadoria
+            hasRetirementYes.addEventListener('change', function() {
+                if (this.checked) {
+                    retirementSection.style.display = 'block';
+                }
+            });
+            
+            hasRetirementNo.addEventListener('change', function() {
+                if (this.checked) {
+                    retirementSection.style.display = 'none';
+                }
+            });
+            
+            // Função para coletar todos os dados do formulário
+            function collectFormData(form) {
+                const formData = new FormData(form);
+                const data = {};
+                
+                // Processar todos os campos básicos
+                for (let [key, value] of formData.entries()) {
+                    // Se já existe um valor para esta chave e não é um array, converta para array
+                    if (data[key] !== undefined && !Array.isArray(data[key])) {
+                        data[key] = [data[key]];
+                        data[key].push(value);
+                    } 
+                    // Se já é um array, adicione o novo valor
+                    else if (Array.isArray(data[key])) {
+                        data[key].push(value);
+                    } 
+                    // Caso contrário, defina o valor normalmente
+                    else {
+                        data[key] = value;
+                    }
+                }
+                
+                // Processar informações dos filhos
+                if (hasChildrenYes.checked) {
+                    const childrenCount = parseInt(document.getElementById('children_count').value) || 0;
+                    const children = [];
+                    
+                    for (let i = 1; i <= childrenCount; i++) {
+                        const childName = document.getElementById(`child_name_${i}`).value;
+                        const childBirthdate = document.getElementById(`child_birthdate_${i}`).value;
+                        const childComments = document.getElementById(`child_comments_${i}`).value;
+                        
+                        if (childName || childBirthdate || childComments) {
+                            children.push({
+                                name: childName,
+                                birthdate: childBirthdate,
+                                comments: childComments
+                            });
+                        }
+                    }
+                    
+                    data.children = children;
+                }
+                
+                return data;
+            }
+            
+            // Função auxiliar para formatar dados dos filhos como propriedades diretas
+            function formatChildrenData(children) {
+                const result = {};
+                
+                children.forEach((child, index) => {
+                    const childNum = index + 1;
+                    if (child.name) {
+                        result[`child${childNum}_name`] = child.name;
+                    }
+                    if (child.birthdate) {
+                        result[`child${childNum}_birthdate`] = child.birthdate;
+                    }
+                    if (child.comments) {
+                        result[`child${childNum}_comments`] = child.comments;
+                    }
+                });
+                
+                return result;
+            }
+            
+            // Função para obter o texto do rótulo selecionado (em vez do valor)
+            function getSelectedLabelText(name) {
+                const selectedInput = form.querySelector(`input[name="${name}"]:checked`);
+                if (!selectedInput) return '';
+                
+                // Buscar o texto do span que está dentro do label que contém o input
+                const labelElement = selectedInput.closest('label');
+                if (labelElement) {
+                    const spanElement = labelElement.querySelector('span');
+                    if (spanElement) {
+                        return spanElement.textContent.trim();
+                    }
+                }
+                
+                // Se não encontrar, retorna o valor
+                return selectedInput.value;
+            }
+            
+            function getSelectedCheckboxLabels(name) {
+                const selectedInputs = form.querySelectorAll(`input[name="${name}"]:checked`);
+                const labels = [];
+                selectedInputs.forEach(input => {
+                    const labelElement = input.closest('label');
+                    if (labelElement) {
+                        const spanElement = labelElement.querySelector('span');
+                        if (spanElement) {
+                            labels.push(spanElement.textContent.trim());
+                        } else {
+                            labels.push(input.value);
+                        }
+                    }
+                });
+                return labels.join(', ');
+            }
+            
+            // Função para reiniciar completamente o formulário
+            function resetFormCompletely() {
+                // Resetar todos os valores do formulário
+                form.reset();
+                
+                // Ocultar todas as seções condicionais
+                const conditionalSections = document.querySelectorAll('.conditional-section');
+                conditionalSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                
+                // Desmarcar todos os radio buttons
+                const radioButtons = form.querySelectorAll('input[type="radio"]');
+                radioButtons.forEach(radio => {
+                    radio.checked = false;
+                });
+                
+                // Limpar todos os campos de texto
+                const textInputs = form.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], textarea');
+                textInputs.forEach(input => {
+                    input.value = '';
+                });
+                
+                // Resetar campos monetários para o valor padrão
+                const currencyInputs = form.querySelectorAll('.currency-input');
+                currencyInputs.forEach(input => {
+                    input.value = '$0.00';
+                });
+                
+                // Resetar o progresso
+                updateProgress();
+                
+                // Limpar mensagens de erro
+                const errorMessages = document.querySelectorAll('.error-message');
+                errorMessages.forEach(msg => {
+                    msg.classList.remove('show');
+                });
+                
+                // Esconder banner de erro se estiver visível
+                const errorBanner = document.getElementById('form-error-banner');
+                if (errorBanner) {
+                    errorBanner.classList.remove('show');
+                }
+            }
+            
+            // Enviar dados para webhook com melhor tratamento de erros
+            async function sendToWebhook(data) {
+                try {
+                    // Mostrar overlay de carregamento
+                    const loadingOverlay = document.getElementById('loading-overlay');
+                    loadingOverlay.classList.add('show');
+                    
+                    // Obter valores dos textos dos rótulos em vez dos valores internos
+                    const hasSpouseText = getSelectedLabelText('has_spouse');
+                    const hasChildrenText = getSelectedLabelText('has_children');
+                    const hasInsuranceText = getSelectedLabelText('has_insurance');
+                    const hasRetirementText = getSelectedLabelText('has_retirement');
+                    const workPermitText = getSelectedLabelText('work_permit');
+                    const priorityText = getSelectedLabelText('priority');
+                    
+                    // Novos campos - obter textos dos rótulos
+                    const incomeGeneratorText = getSelectedCheckboxLabels('income_generator');
+                    const clientIncomePercentage = data.client_income_percentage || '';
+                    const spouseIncomePercentage = data.spouse_income_percentage || '';
+                    const hasInvestmentText = getSelectedLabelText('has_investment');
+                    const survivalTimeText = document.getElementById('survival_time')?.options[document.getElementById('survival_time')?.selectedIndex]?.text || '';
+                    const houseStatusText = getSelectedLabelText('house_status');
+                    const hasMortgageText = getSelectedLabelText('has_mortgage');
+                    
+                    // Novos campos pessoais
+                    const timeInUsa = data.time_in_usa || '';
+                    const previousCityBrazil = data.previous_city_brazil || '';
+                    const previousProfessionBrazil = data.previous_profession_brazil || '';
+                    
+                    // Transformar retirement_type em string com os textos dos rótulos
+                    let retirementTypes = [];
+                    const retirementTypeInputs = form.querySelectorAll('input[name="retirement_type"]:checked');
+                    retirementTypeInputs.forEach(input => {
+                        const label = input.closest('label');
+                        if (label) {
+                            const span = label.querySelector('span');
+                            if (span) {
+                                retirementTypes.push(span.textContent.trim());
+                            }
+                        }
+                    });
+                    
+                    // Formatar dados para o Go High Level com os textos em português
+                    const webhookData = {
+                        // Dados principais do contato no nível raiz
+                        email: data.email || '',
+                        phone: data.phone || '',
+                        dateOfBirth: data.birthdate || '',
+                        full_name: data.name || '',
+                        profession: data.profession || '',
+                        documentation_status: workPermitText,
+                        time_in_usa: timeInUsa,
+                        previous_city_brazil: previousCityBrazil,
+                        previous_profession_brazil: previousProfessionBrazil,
+                        has_spouse: hasSpouseText,
+                        spouse_name: data.spouse_name || '',
+                        spouse_birthdate: data.spouse_birthdate || '',
+                        spouse_profession: data.spouse_profession || '',
+                        spouse_comments: data.spouse_comments || '',
+                        has_children: hasChildrenText,
+                        children_count: data.children_count || '',
+                        has_insurance: hasInsuranceText,
+                        insurance_type: data.insurance_type || '',
+                        insurance_coverage: data.insurance_coverage || '',
+                        has_retirement: hasRetirementText,
+                        retirement_types: retirementTypes.join(', '),
+                        priority: priorityText,
+                        
+                        // Novos campos financeiros
+                        income_generator: incomeGeneratorText,
+                        client_income_percentage: clientIncomePercentage,
+                        spouse_income_percentage: spouseIncomePercentage,
+                        has_investment: hasInvestmentText,
+                        investment_type: data.investment_type || '',
+                        investment_value: data.investment_value || '',
+                        survival_time: survivalTimeText,
+                        house_status: houseStatusText,
+                        has_mortgage: hasMortgageText,
+                        mortgage_value: data.mortgage_value || '',
+                        monthly_expense: data.monthly_expense || '',
+                        monthly_income: data.monthly_income || '',
+                        ...(data.meeting_comments ? { meeting_comments: data.meeting_comments } : {}),
+                        
+                        // Adicionar informações dos filhos como propriedades diretas
+                        ...formatChildrenData(data.children || [])
+                    };
+                    
+                    console.log('Enviando dados para webhook:', JSON.stringify(webhookData));
+                    
+                    // Adicionar timeout para a requisição
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 segundos timeout
+                    
+                    const response = await fetch(webhookUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(webhookData),
+                        signal: controller.signal
+                    }).finally(() => clearTimeout(timeoutId));
+                    
+                    const responseText = await response.text();
+                    console.log('Resposta completa do webhook:', responseText);
+                    
+                    // Esconder overlay de carregamento
+                    loadingOverlay.classList.remove('show');
+                    
+                    if (response.ok) {
+                        // Exibir modal de sucesso ao invés de alert
+                        showSuccessModal(responseText);
+                        
+                        // Resetar formulário
+                        form.reset();
+                        
+                        // Esconder todas as seções condicionais
+                        document.querySelectorAll('.conditional-section').forEach(section => {
+                            section.style.display = 'none';
+                        });
+                        
+                        updateProgress();
+                        
+                        return { success: true, message: 'Dados enviados com sucesso!' };
+                    } else {
+                        console.error('Erro do webhook:', response.status, responseText);
+                        alert('Erro do servidor: Status ' + response.status + ' - ' + responseText);
+                        return { success: false, message: `Erro: ${response.status} - ${responseText}` };
+                    }
+                } catch (error) {
+                    // Esconder overlay de carregamento em caso de erro
+                    document.getElementById('loading-overlay').classList.remove('show');
+                    
+                    // Verificar se é um erro de timeout
+                    if (error.name === 'AbortError') {
+                        console.error('Timeout na requisição para o webhook');
+                        alert('A conexão com o servidor demorou muito para responder. Por favor, tente novamente mais tarde.');
+                    } else {
+                    console.error('Erro ao enviar dados:', error);
+                        alert('Erro ao enviar os dados: ' + (error.message || 'Erro de conexão'));
+                    }
+                    
+                    return { success: false, message: 'Erro ao enviar os dados: ' + (error.message || 'Erro de conexão') };
+                }
+            }
+            
+            // Função para exibir o modal de sucesso
+            function showSuccessModal(responseText) {
+                const modal = document.getElementById('success-modal');
+                const responseElement = document.getElementById('modal-response-text');
+                const closeBtn = document.getElementById('success-modal-close');
+                
+                // Definir texto da resposta (oculto para usuário final)
+                responseElement.textContent = responseText;
+                
+                // Mostrar o modal
+                modal.classList.add('show');
+                
+                // Fechar o modal ao clicar no botão OK
+                closeBtn.addEventListener('click', function() {
+                    modal.classList.remove('show');
+                });
+                
+                // Adicionar evento para o botão de agendamento
+                const scheduleBtn = document.getElementById('schedule-btn');
+                scheduleBtn.addEventListener('click', function() {
+                    window.location.href = 'https://call.witkafinancialgroup.com/widget/groups/wfgfinancial-calendarios';
+                });
+                
+                // Fechar o modal ao clicar fora dele
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        modal.classList.remove('show');
+                    }
+                });
+            }
+            
+            // Limpar formulário
+            resetButton.addEventListener('click', function() {
+                form.reset();
+                
+                // Esconder todas as seções condicionais
+                document.querySelectorAll('.conditional-section').forEach(section => {
+                    section.style.display = 'none';
+                });
+                
+                updateProgress();
+            });
+
+            // Event listener para o botão Preencher Aplicação
+            document.getElementById('fill-form').addEventListener('click', function() {
+                window.open('https://witkafinancialgroup.com/application-page', '_blank');
+            });
+            
+            // Enviar formulário
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Validar o formulário completo antes de enviar
+                if (!validateFullForm()) {
+                    // Formulário inválido - não envia
+                    scrollToFirstError();
+                    return;
+                }
+                
+                // Coletar todos os dados
+                const formData = collectFormData(form);
+                console.log('Dados coletados do formulário:', formData);
+                
+                // Exibir loading
+                const submitButton = form.querySelector('button[type="submit"]');
+                const originalText = submitButton.textContent;
+                submitButton.textContent = 'Enviando...';
+                submitButton.disabled = true;
+                
+                try {
+                    // Enviar para webhook
+                    const result = await sendToWebhook(formData);
+                    
+                    // Exibir resultado
+                    if (result.success) {
+                        // O modal já será exibido pela função sendToWebhook
+                        form.reset();
+                        
+                        // Esconder todas as seções condicionais
+                        document.querySelectorAll('.conditional-section').forEach(section => {
+                            section.style.display = 'none';
+                        });
+                        
+                        updateProgress();
+                        
+                        // Esconder banner de erro se estiver visível
+                        document.getElementById('form-error-banner').classList.remove('show');
+                    } else {
+                        alert(result.message);
+                    }
+                } catch (error) {
+                    alert('Erro durante o envio: ' + error.message);
+                    console.error('Erro durante o envio:', error);
+                } finally {
+                    // Restaurar estado do botão
+                    submitButton.textContent = originalText;
+                    submitButton.disabled = false;
+                }
+            });
+            
+            // Função de validação completa do formulário
+            function validateFullForm() {
+                let isValid = true;
+                const errorBanner = document.getElementById('form-error-banner');
+                const errorDetails = document.getElementById('error-details');
+                
+                // Lista para armazenar as seções com erro
+                const errorSections = [];
+                
+                // Validar seção de informações pessoais
+                if (!validatePersonalSection()) {
+                    isValid = false;
+                    errorSections.push('Informações Pessoais');
+                }
+                
+                // Validar seção de cônjuge
+                if (!validateSpouseSection()) {
+                    isValid = false;
+                    errorSections.push('Informações do Cônjuge');
+                }
+                
+                // Validar seção de filhos
+                if (!validateChildrenSection()) {
+                    isValid = false;
+                    errorSections.push('Informações dos Filhos');
+                }
+                
+                // Validar seção financeira
+                if (!validateFinancialSection()) {
+                    isValid = false;
+                    errorSections.push('Informações Financeiras');
+                }
+                
+                // Se inválido, mostrar o banner de erro com detalhes
+                if (!isValid) {
+                    errorDetails.innerHTML = 'Seções: ' + errorSections.join(', ');
+                    errorBanner.classList.add('show');
+                } else {
+                    errorBanner.classList.remove('show');
+                }
+                
+                return isValid;
+            }
+            
+            // Função para validar a seção de informações pessoais
+            function validatePersonalSection() {
+                let isValid = true;
+                
+                // Obter todos os campos obrigatórios da seção pessoal
+                const name = document.getElementById('name');
+                const email = document.getElementById('email');
+                const phone = document.getElementById('phone');
+                const profession = document.getElementById('profession');
+                const birthdate = document.getElementById('birthdate');
+                const workPermit = form.querySelector('input[name="work_permit"]:checked');
+                
+                // Validar campo por campo
+                if (!name.value.trim()) {
+                    markInvalid(name, 'Por favor, informe seu nome completo');
+                    isValid = false;
+                } else {
+                    markValid(name);
+                }
+                
+                if (!email.value.trim()) {
+                    markInvalid(email, 'Por favor, informe seu email');
+                    isValid = false;
+                } else if (!isValidEmail(email.value.trim())) {
+                    markInvalid(email, 'Por favor, informe um email válido');
+                    isValid = false;
+                } else {
+                    markValid(email);
+                }
+                
+                if (!phone.value.trim()) {
+                    markInvalid(phone, 'Por favor, informe seu telefone');
+                    isValid = false;
+                } else {
+                    markValid(phone);
+                }
+                
+                if (!profession.value.trim()) {
+                    markInvalid(profession, 'Por favor, informe sua profissão');
+                    isValid = false;
+                } else {
+                    markValid(profession);
+                }
+                
+                if (!birthdate.value) {
+                    markInvalid(birthdate, 'Por favor, informe sua data de nascimento');
+                    isValid = false;
+                } else {
+                    markValid(birthdate);
+                }
+                
+                if (!workPermit) {
+                    // Como são radio buttons, adicionamos uma mensagem de erro após o último radio
+                    const workPermitGroup = form.querySelector('.radio-group:has(input[name="work_permit"])');
+                    
+                    if (workPermitGroup) {
+                        let errorElement = workPermitGroup.nextElementSibling;
+                        if (!errorElement || !errorElement.classList.contains('error-message')) {
+                            errorElement = document.createElement('div');
+                            errorElement.className = 'error-message';
+                            workPermitGroup.parentNode.insertBefore(errorElement, workPermitGroup.nextSibling);
+                        }
+                        
+                        errorElement.textContent = 'Por favor, selecione um status de documentação';
+                        errorElement.classList.add('show');
+                        isValid = false;
+                    }
+                } else {
+                    // Remover mensagem de erro se existir
+                    const workPermitGroup = form.querySelector('.radio-group:has(input[name="work_permit"])');
+                    if (workPermitGroup) {
+                        const errorElement = workPermitGroup.nextElementSibling;
+                        if (errorElement && errorElement.classList.contains('error-message')) {
+                            errorElement.classList.remove('show');
+                        }
+                    }
+                }
+                
+                return isValid;
+            }
+            
+            // Função para validar a seção de cônjuge
+            function validateSpouseSection() {
+                let isValid = true;
+                
+                // Verificar se selecionou Sim ou Não para ter cônjuge
+                const hasSpouseYes = document.getElementById('has-spouse-yes');
+                const hasSpouseNo = document.getElementById('has-spouse-no');
+                
+                if (!hasSpouseYes.checked && !hasSpouseNo.checked) {
+                    // Adicionar mensagem de erro para selecionar se tem cônjuge
+                    const spouseGroup = form.querySelector('.radio-group:has(input[name="has_spouse"])');
+                    
+                    if (spouseGroup) {
+                        let errorElement = spouseGroup.nextElementSibling;
+                        if (!errorElement || !errorElement.classList.contains('error-message')) {
+                            errorElement = document.createElement('div');
+                            errorElement.className = 'error-message';
+                            spouseGroup.parentNode.insertBefore(errorElement, spouseGroup.nextSibling);
+                        }
+                        
+                        errorElement.textContent = 'Por favor, informe se possui cônjuge';
+                        errorElement.classList.add('show');
+                        isValid = false;
+                    }
+                } else if (hasSpouseYes.checked) {
+                    // Se tem cônjuge, validar campos do cônjuge
+                    const spouseName = document.getElementById('spouse_name');
+                    const spouseBirthdate = document.getElementById('spouse_birthdate');
+                    const spouseProfession = document.getElementById('spouse_profession');
+                    
+                    if (!spouseName.value.trim()) {
+                        markInvalid(spouseName, 'Por favor, informe o nome do cônjuge');
+                        isValid = false;
+                    } else {
+                        markValid(spouseName);
+                    }
+                    
+                    if (!spouseBirthdate.value) {
+                        markInvalid(spouseBirthdate, 'Por favor, informe a data de nascimento do cônjuge');
+                        isValid = false;
+                    } else {
+                        markValid(spouseBirthdate);
+                    }
+                    
+                    if (!spouseProfession.value.trim()) {
+                        markInvalid(spouseProfession, 'Por favor, informe a profissão do cônjuge');
+                        isValid = false;
+                    } else {
+                        markValid(spouseProfession);
+                    }
+                    
+                    // Limpar mensagem de erro do radio se existir
+                    const spouseGroup = form.querySelector('.radio-group:has(input[name="has_spouse"])');
+                    if (spouseGroup) {
+                        const errorElement = spouseGroup.nextElementSibling;
+                        if (errorElement && errorElement.classList.contains('error-message')) {
+                            errorElement.classList.remove('show');
+                        }
+                    }
+                } else {
+                    // Se selecionou que não tem cônjuge, a seção está válida
+                    // Limpar mensagem de erro do radio se existir
+                    const spouseGroup = form.querySelector('.radio-group:has(input[name="has_spouse"])');
+                    if (spouseGroup) {
+                        const errorElement = spouseGroup.nextElementSibling;
+                        if (errorElement && errorElement.classList.contains('error-message')) {
+                            errorElement.classList.remove('show');
+                        }
+                    }
+                }
+                
+                return isValid;
+            }
+            
+            // Função para validar a seção de filhos
+            function validateChildrenSection() {
+                let isValid = true;
+                
+                // Verificar se selecionou Sim ou Não para ter filhos
+                const hasChildrenYes = document.getElementById('has-children-yes');
+                const hasChildrenNo = document.getElementById('has-children-no');
+                
+                if (!hasChildrenYes.checked && !hasChildrenNo.checked) {
+                    // Adicionar mensagem de erro para selecionar se tem filhos
+                    const childrenGroup = form.querySelector('.radio-group:has(input[name="has_children"])');
+                    
+                    if (childrenGroup) {
+                        let errorElement = childrenGroup.nextElementSibling;
+                        if (!errorElement || !errorElement.classList.contains('error-message')) {
+                            errorElement = document.createElement('div');
+                            errorElement.className = 'error-message';
+                            childrenGroup.parentNode.insertBefore(errorElement, childrenGroup.nextSibling);
+                        }
+                        
+                        errorElement.textContent = 'Por favor, informe se possui filhos';
+                        errorElement.classList.add('show');
+                        isValid = false;
+                    }
+                } else if (hasChildrenYes.checked) {
+                    // Se tem filhos, validar informações básicas
+                    const childCount = document.getElementById('children_count');
+                    const firstChildName = document.getElementById('child_name_1');
+                    const firstChildBirthdate = document.getElementById('child_birthdate_1');
+                    
+                    if (!childCount.value) {
+                        markInvalid(childCount, 'Por favor, selecione quantos filhos você tem');
+                        isValid = false;
+                    } else {
+                        markValid(childCount);
+                    }
+                    
+                    if (firstChildName && !firstChildName.value.trim()) {
+                        markInvalid(firstChildName, 'Por favor, informe o nome do primeiro filho');
+                        isValid = false;
+                    } else if (firstChildName) {
+                        markValid(firstChildName);
+                    }
+                    
+                    if (firstChildBirthdate && !firstChildBirthdate.value) {
+                        markInvalid(firstChildBirthdate, 'Por favor, informe a data de nascimento do primeiro filho');
+                        isValid = false;
+                    } else if (firstChildBirthdate) {
+                        markValid(firstChildBirthdate);
+                    }
+                    
+                    // Limpar mensagem de erro do radio se existir
+                    const childrenGroup = form.querySelector('.radio-group:has(input[name="has_children"])');
+                    if (childrenGroup) {
+                        const errorElement = childrenGroup.nextElementSibling;
+                        if (errorElement && errorElement.classList.contains('error-message')) {
+                            errorElement.classList.remove('show');
+                        }
+                    }
+                } else {
+                    // Se selecionou que não tem filhos, a seção está válida
+                    // Limpar mensagem de erro do radio se existir
+                    const childrenGroup = form.querySelector('.radio-group:has(input[name="has_children"])');
+                    if (childrenGroup) {
+                        const errorElement = childrenGroup.nextElementSibling;
+                        if (errorElement && errorElement.classList.contains('error-message')) {
+                            errorElement.classList.remove('show');
+                        }
+                    }
+                }
+                
+                return isValid;
+            }
+            
+            // Função para validar a seção financeira
+            function validateFinancialSection() {
+                try {
+                    let isValid = true; // Adicionando a declaração da variável isValid
+                
+                const hasInsurance = form.querySelector('input[name="has_insurance"]:checked');
+                const hasRetirement = form.querySelector('input[name="has_retirement"]:checked');
+                const priority = form.querySelector('input[name="priority"]:checked');
+                    
+                    // Novos campos obrigatórios
+                    const incomeGenerators = form.querySelectorAll('input[name="income_generator"]:checked');
+                    const clientIncomePercentage = document.getElementById('client_income_percentage');
+                    const spouseIncomePercentage = document.getElementById('spouse_income_percentage');
+                    const hasInvestment = form.querySelector('input[name="has_investment"]:checked');
+                    const survivalTime = document.getElementById('survival_time');
+                    const houseStatus = form.querySelector('input[name="house_status"]:checked');
+                    const monthlyExpense = document.getElementById('monthly_expense');
+                    const monthlyIncome = document.getElementById('monthly_income');
+                
+                // Validar seguro
+                if (!hasInsurance) {
+                    const insuranceGroup = form.querySelector('.radio-group:has(input[name="has_insurance"])');
+                    
+                    if (insuranceGroup) {
+                        let errorElement = insuranceGroup.nextElementSibling;
+                        if (!errorElement || !errorElement.classList.contains('error-message')) {
+                            errorElement = document.createElement('div');
+                            errorElement.className = 'error-message';
+                            insuranceGroup.parentNode.insertBefore(errorElement, insuranceGroup.nextSibling);
+                        }
+                        
+                        errorElement.textContent = 'Por favor, informe se possui seguro';
+                        errorElement.classList.add('show');
+                        isValid = false;
+                    }
+                } else {
+                    // Limpar mensagem de erro
+                    const insuranceGroup = form.querySelector('.radio-group:has(input[name="has_insurance"])');
+                    if (insuranceGroup) {
+                        const errorElement = insuranceGroup.nextElementSibling;
+                        if (errorElement && errorElement.classList.contains('error-message')) {
+                            errorElement.classList.remove('show');
+                        }
+                    }
+                }
+                
+                // Validar aposentadoria
+                if (!hasRetirement) {
+                    const retirementGroup = form.querySelector('.radio-group:has(input[name="has_retirement"])');
+                    
+                    if (retirementGroup) {
+                        let errorElement = retirementGroup.nextElementSibling;
+                        if (!errorElement || !errorElement.classList.contains('error-message')) {
+                            errorElement = document.createElement('div');
+                            errorElement.className = 'error-message';
+                            retirementGroup.parentNode.insertBefore(errorElement, retirementGroup.nextSibling);
+                        }
+                        
+                        errorElement.textContent = 'Por favor, informe se possui aposentadoria';
+                        errorElement.classList.add('show');
+                        isValid = false;
+                    }
+                } else if (hasRetirementYes.checked) {
+                    // Se tem aposentadoria, verificar se selecionou o tipo
+                    const retirementTypes = form.querySelectorAll('input[name="retirement_type"]:checked');
+                    
+                    if (retirementTypes.length === 0) {
+                        const typeGroup = form.querySelector('.checkbox-group:has(input[name="retirement_type"])');
+                        
+                        if (typeGroup) {
+                            let errorElement = typeGroup.nextElementSibling;
+                            if (!errorElement || !errorElement.classList.contains('error-message')) {
+                                errorElement = document.createElement('div');
+                                errorElement.className = 'error-message';
+                                typeGroup.parentNode.insertBefore(errorElement, typeGroup.nextSibling);
+                            }
+                            
+                            errorElement.textContent = 'Por favor, selecione pelo menos um tipo de aposentadoria';
+                            errorElement.classList.add('show');
+                            isValid = false;
+                        }
+                    } else {
+                        // Limpar mensagem de erro
+                        const typeGroup = form.querySelector('.checkbox-group:has(input[name="retirement_type"])');
+                        if (typeGroup) {
+                            const errorElement = typeGroup.nextElementSibling;
+                            if (errorElement && errorElement.classList.contains('error-message')) {
+                                errorElement.classList.remove('show');
+                            }
+                        }
+                    }
+                    
+                    // Limpar mensagem de erro do radio se existir
+                    const retirementGroup = form.querySelector('.radio-group:has(input[name="has_retirement"])');
+                    if (retirementGroup) {
+                        const errorElement = retirementGroup.nextElementSibling;
+                        if (errorElement && errorElement.classList.contains('error-message')) {
+                            errorElement.classList.remove('show');
+                        }
+                    }
+                } else {
+                    // Limpar mensagem de erro do radio se existir
+                    const retirementGroup = form.querySelector('.radio-group:has(input[name="has_retirement"])');
+                    if (retirementGroup) {
+                        const errorElement = retirementGroup.nextElementSibling;
+                        if (errorElement && errorElement.classList.contains('error-message')) {
+                            errorElement.classList.remove('show');
+                        }
+                    }
+                }
+                
+                // Validar prioridade
+                if (!priority) {
+                    const priorityGroup = form.querySelector('.radio-group:has(input[name="priority"])');
+                    
+                    if (priorityGroup) {
+                        let errorElement = priorityGroup.nextElementSibling;
+                        if (!errorElement || !errorElement.classList.contains('error-message')) {
+                            errorElement = document.createElement('div');
+                            errorElement.className = 'error-message';
+                            priorityGroup.parentNode.insertBefore(errorElement, priorityGroup.nextSibling);
+                        }
+                        
+                        errorElement.textContent = 'Por favor, informe o que é mais importante para você';
+                        errorElement.classList.add('show');
+                        isValid = false;
+                    }
+                } else {
+                    // Limpar mensagem de erro
+                    const priorityGroup = form.querySelector('.radio-group:has(input[name="priority"])');
+                    if (priorityGroup) {
+                        const errorElement = priorityGroup.nextElementSibling;
+                        if (errorElement && errorElement.classList.contains('error-message')) {
+                            errorElement.classList.remove('show');
+                        }
+                    }
+                }
+                    
+                    // Validar quem gera mais renda na casa
+                    if (incomeGenerators.length === 0) {
+                        const incomeGeneratorGroup = form.querySelector('.checkbox-group:has(input[name="income_generator"])');
+                        
+                        if (incomeGeneratorGroup) {
+                            let errorElement = incomeGeneratorGroup.nextElementSibling;
+                            if (!errorElement || !errorElement.classList.contains('error-message')) {
+                                errorElement = document.createElement('div');
+                                errorElement.className = 'error-message';
+                                incomeGeneratorGroup.parentNode.insertBefore(errorElement, incomeGeneratorGroup.nextSibling);
+                            }
+                            
+                            errorElement.textContent = 'Por favor, informe quem gera mais renda na casa';
+                            errorElement.classList.add('show');
+                            isValid = false;
+                        }
+                    } else {
+                        // Limpar mensagem de erro
+                        const incomeGeneratorGroup = form.querySelector('.checkbox-group:has(input[name="income_generator"])');
+                        if (incomeGeneratorGroup) {
+                            const errorElement = incomeGeneratorGroup.nextElementSibling;
+                            if (errorElement && errorElement.classList.contains('error-message')) {
+                                errorElement.classList.remove('show');
+                            }
+                        }
+                    }
+                    
+                    // Validar percentuais de renda
+                    if (!clientIncomePercentage || !clientIncomePercentage.value.trim()) {
+                        let errorElement = clientIncomePercentage?.nextElementSibling;
+                        if (!errorElement || !errorElement.classList.contains('error-message')) {
+                            errorElement = document.createElement('div');
+                            errorElement.className = 'error-message';
+                            if (clientIncomePercentage) {
+                                clientIncomePercentage.parentNode.insertBefore(errorElement, clientIncomePercentage.nextSibling);
+                            }
+                        }
+                        errorElement.textContent = 'Por favor, informe o percentual do cliente';
+                        errorElement.classList.add('show');
+                        isValid = false;
+                    } else {
+                        const errorElement = clientIncomePercentage?.nextElementSibling;
+                        if (errorElement && errorElement.classList.contains('error-message')) {
+                            errorElement.classList.remove('show');
+                        }
+                    }
+                    
+                    if (!spouseIncomePercentage || !spouseIncomePercentage.value.trim()) {
+                        let errorElement = spouseIncomePercentage?.nextElementSibling;
+                        if (!errorElement || !errorElement.classList.contains('error-message')) {
+                            errorElement = document.createElement('div');
+                            errorElement.className = 'error-message';
+                            if (spouseIncomePercentage) {
+                                spouseIncomePercentage.parentNode.insertBefore(errorElement, spouseIncomePercentage.nextSibling);
+                            }
+                        }
+                        errorElement.textContent = 'Por favor, informe o percentual do cônjuge';
+                        errorElement.classList.add('show');
+                        isValid = false;
+                    } else {
+                        const errorElement = spouseIncomePercentage?.nextElementSibling;
+                        if (errorElement && errorElement.classList.contains('error-message')) {
+                            errorElement.classList.remove('show');
+                        }
+                    }
+                    
+                    // Validar se possui investimento
+                    if (!hasInvestment) {
+                        const investmentGroup = form.querySelector('.radio-group:has(input[name="has_investment"])');
+                        
+                        if (investmentGroup) {
+                            let errorElement = investmentGroup.nextElementSibling;
+                            if (!errorElement || !errorElement.classList.contains('error-message')) {
+                                errorElement = document.createElement('div');
+                                errorElement.className = 'error-message';
+                                investmentGroup.parentNode.insertBefore(errorElement, investmentGroup.nextSibling);
+                            }
+                            
+                            errorElement.textContent = 'Por favor, informe se possui investimento';
+                            errorElement.classList.add('show');
+                            isValid = false;
+                        }
+                    } else if (hasInvestmentYes.checked) {
+                        // Se tem investimento, validar campos relacionados
+                        const investmentType = document.getElementById('investment_type');
+                        const investmentValue = document.getElementById('investment_value');
+                        
+                        if (!investmentType.value.trim()) {
+                            markInvalid(investmentType, 'Por favor, informe o tipo de investimento');
+                            isValid = false;
+                        } else {
+                            markValid(investmentType);
+                        }
+                        
+                        if (!investmentValue.value.trim()) {
+                            markInvalid(investmentValue, 'Por favor, informe o valor investido');
+                            isValid = false;
+                        } else {
+                            markValid(investmentValue);
+                        }
+                        
+                        // Limpar mensagem de erro do radio
+                        const investmentGroup = form.querySelector('.radio-group:has(input[name="has_investment"])');
+                        if (investmentGroup) {
+                            const errorElement = investmentGroup.nextElementSibling;
+                            if (errorElement && errorElement.classList.contains('error-message')) {
+                                errorElement.classList.remove('show');
+                            }
+                        }
+                    } else {
+                        // Limpar mensagem de erro do radio
+                        const investmentGroup = form.querySelector('.radio-group:has(input[name="has_investment"])');
+                        if (investmentGroup) {
+                            const errorElement = investmentGroup.nextElementSibling;
+                            if (errorElement && errorElement.classList.contains('error-message')) {
+                                errorElement.classList.remove('show');
+                            }
+                        }
+                    }
+                    
+                    // Validar tempo de sobrevivência financeira
+                    if (!survivalTime.value) {
+                        markInvalid(survivalTime, 'Por favor, selecione o tempo que conseguem sobreviver');
+                        isValid = false;
+                    } else {
+                        markValid(survivalTime);
+                    }
+                    
+                    // Validar status da casa
+                    if (!houseStatus) {
+                        const houseStatusGroup = form.querySelector('.radio-group:has(input[name="house_status"])');
+                        
+                        if (houseStatusGroup) {
+                            let errorElement = houseStatusGroup.nextElementSibling;
+                            if (!errorElement || !errorElement.classList.contains('error-message')) {
+                                errorElement = document.createElement('div');
+                                errorElement.className = 'error-message';
+                                houseStatusGroup.parentNode.insertBefore(errorElement, houseStatusGroup.nextSibling);
+                            }
+                            
+                            errorElement.textContent = 'Por favor, informe se a casa é própria ou alugada';
+                            errorElement.classList.add('show');
+                            isValid = false;
+                        }
+                    } else if (houseOwn.checked) {
+                        // Se casa própria, validar mortgage
+                        const hasMortgage = form.querySelector('input[name="has_mortgage"]:checked');
+                        
+                        if (!hasMortgage) {
+                            const mortgageGroup = form.querySelector('.radio-group:has(input[name="has_mortgage"])');
+                            
+                            if (mortgageGroup) {
+                                let errorElement = mortgageGroup.nextElementSibling;
+                                if (!errorElement || !errorElement.classList.contains('error-message')) {
+                                    errorElement = document.createElement('div');
+                                    errorElement.className = 'error-message';
+                                    mortgageGroup.parentNode.insertBefore(errorElement, mortgageGroup.nextSibling);
+                                }
+                                
+                                errorElement.textContent = 'Por favor, informe se possui mortgage em aberto';
+                                errorElement.classList.add('show');
+                                isValid = false;
+                            }
+                        } else if (hasMortgageYes.checked) {
+                            // Se tem mortgage, validar valor
+                            const mortgageValue = document.getElementById('mortgage_value');
+                            
+                            if (!mortgageValue.value.trim()) {
+                                markInvalid(mortgageValue, 'Por favor, informe o valor do mortgage');
+                                isValid = false;
+                            } else {
+                                markValid(mortgageValue);
+                            }
+                            
+                            // Limpar mensagem de erro do radio
+                            const mortgageGroup = form.querySelector('.radio-group:has(input[name="has_mortgage"])');
+                            if (mortgageGroup) {
+                                const errorElement = mortgageGroup.nextElementSibling;
+                                if (errorElement && errorElement.classList.contains('error-message')) {
+                                    errorElement.classList.remove('show');
+                                }
+                            }
+                        } else {
+                            // Limpar mensagem de erro do radio
+                            const mortgageGroup = form.querySelector('.radio-group:has(input[name="has_mortgage"])');
+                            if (mortgageGroup) {
+                                const errorElement = mortgageGroup.nextElementSibling;
+                                if (errorElement && errorElement.classList.contains('error-message')) {
+                                    errorElement.classList.remove('show');
+                                }
+                            }
+                        }
+                        
+                        // Limpar mensagem de erro do radio de house status
+                        const houseStatusGroup = form.querySelector('.radio-group:has(input[name="house_status"])');
+                        if (houseStatusGroup) {
+                            const errorElement = houseStatusGroup.nextElementSibling;
+                            if (errorElement && errorElement.classList.contains('error-message')) {
+                                errorElement.classList.remove('show');
+                            }
+                        }
+                    } else {
+                        // Limpar mensagem de erro do radio
+                        const houseStatusGroup = form.querySelector('.radio-group:has(input[name="house_status"])');
+                        if (houseStatusGroup) {
+                            const errorElement = houseStatusGroup.nextElementSibling;
+                            if (errorElement && errorElement.classList.contains('error-message')) {
+                                errorElement.classList.remove('show');
+                            }
+                        }
+                    }
+                    
+                    // Validar despesa mensal
+                    if (!monthlyExpense.value.trim()) {
+                        markInvalid(monthlyExpense, 'Por favor, informe a despesa mensal estimada');
+                        isValid = false;
+                    } else {
+                        markValid(monthlyExpense);
+                    }
+                    
+                    // Validar renda mensal
+                    if (!monthlyIncome.value.trim()) {
+                        markInvalid(monthlyIncome, 'Por favor, informe a renda mensal estimada');
+                        isValid = false;
+                    } else {
+                        markValid(monthlyIncome);
+                    }
+                
+                return isValid;
+                } catch (e) {
+                    console.error('Erro ao validar seção financeira:', e);
+                    return false;
+                }
+            }
+            
+            // Adicionar validação em tempo real para melhorar UX
+            formInputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    if (this.required || this.getAttribute('data-required') === 'true') {
+                        if (!this.value.trim()) {
+                            markInvalid(this, 'Este campo é obrigatório');
+                        } else if (this.type === 'email' && !isValidEmail(this.value.trim())) {
+                            markInvalid(this, 'Por favor, informe um email válido');
+                        } else {
+                            markValid(this);
+                        }
+                    }
+                });
+                
+                input.addEventListener('input', function() {
+                    // Limpar erro ao digitar
+                    if (this.classList.contains('invalid-input')) {
+                        this.classList.remove('invalid-input');
+                        const errorElement = this.nextElementSibling;
+                        if (errorElement && errorElement.classList.contains('error-message')) {
+                            errorElement.classList.remove('show');
+                        }
+                    }
+                });
+            });
+            
+            // Formatação para campos monetários
+            const currencyInputs = document.querySelectorAll('.currency-input');
+            currencyInputs.forEach(input => {
+                input.addEventListener('input', function(e) {
+                    // Remove tudo exceto números
+                    let value = this.value.replace(/[^\d]/g, '');
+                    
+                    // Converte para centavos (divide por 100 para obter dólares e centavos)
+                    const dollars = value ? parseInt(value, 10) / 100 : 0;
+                    
+                    // Formata como moeda
+                    this.value = dollars.toLocaleString('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+                });
+                
+                // Quando o campo recebe foco, remova a formatação
+                input.addEventListener('focus', function(e) {
+                    // Armazena o valor atual
+                    const currentValue = this.value;
+                    
+                    // Se não tiver valor, não faça nada
+                    if (!currentValue || currentValue === '$0.00') {
+                        this.value = '';
+                        return;
+                    }
+                    
+                    // Remove tudo exceto números
+                    const numericValue = currentValue.replace(/[^\d]/g, '');
+                    
+                    // Converte para centavos sem formatação de moeda
+                    const cents = parseInt(numericValue, 10);
+                    
+                    // Formata com o símbolo $ mas sem vírgulas
+                    this.value = '$' + (cents / 100).toFixed(2);
+                    
+                    // Coloca o cursor no final
+                    setTimeout(() => {
+                        this.selectionStart = this.selectionEnd = this.value.length;
+                    }, 0);
+                });
+                
+                // Quando o campo perde o foco, adiciona a formatação completa
+                input.addEventListener('blur', function(e) {
+                    // Se estiver vazio, não formate
+                    if (!this.value) {
+                        return;
+                    }
+                    
+                    // Remove tudo exceto números
+                    let value = this.value.replace(/[^\d]/g, '');
+                    
+                    // Se não tiver valor após a limpeza, defina como 0
+                    if (!value) {
+                        this.value = '$0.00';
+                        return;
+                    }
+                    
+                    // Converte para centavos (divide por 100 para obter dólares e centavos)
+                    const dollars = parseInt(value, 10) / 100;
+                    
+                    // Formata como moeda
+                    this.value = dollars.toLocaleString('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+                });
+            });
+            
+            // Funções auxiliares de validação
+            function markInvalid(element, message) {
+                element.classList.add('invalid-input');
+                
+                // Adicionar ou atualizar mensagem de erro
+                let errorElement = element.nextElementSibling;
+                if (!errorElement || !errorElement.classList.contains('error-message')) {
+                    errorElement = document.createElement('div');
+                    errorElement.className = 'error-message';
+                    element.parentNode.insertBefore(errorElement, element.nextSibling);
+                }
+                
+                errorElement.textContent = message;
+                errorElement.classList.add('show');
+            }
+            
+            function markValid(element) {
+                element.classList.remove('invalid-input');
+                
+                // Remover mensagem de erro se existir
+                const errorElement = element.nextElementSibling;
+                if (errorElement && errorElement.classList.contains('error-message')) {
+                    errorElement.classList.remove('show');
+                }
+            }
+            
+            function isValidEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+            
+            function scrollToFirstError() {
+                const firstError = document.querySelector('.invalid-input, .error-message.show');
+                if (firstError) {
+                    const card = firstError.closest('.card');
+                    if (card) {
+                        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }
+            }
+            
+            // Função auxiliar para marcar campo como inválido
+            function markInvalid(element, message) {
+                element.classList.add('is-invalid');
+                
+                // Verificar se já existe uma mensagem de erro
+                let errorElement = element.nextElementSibling;
+                if (!errorElement || !errorElement.classList.contains('error-message')) {
+                    errorElement = document.createElement('div');
+                    errorElement.className = 'error-message';
+                    element.parentNode.insertBefore(errorElement, element.nextSibling);
+                }
+                
+                errorElement.textContent = message;
+                errorElement.classList.add('show');
+            }
+            
+            // Função auxiliar para marcar campo como válido
+            function markValid(element) {
+                element.classList.remove('is-invalid');
+                
+                // Remover mensagem de erro
+                const errorElement = element.nextElementSibling;
+                        if (errorElement && errorElement.classList.contains('error-message')) {
+                            errorElement.classList.remove('show');
+                        }
+                    }
+            
+            // Inicializar todas as seções condicionais como ocultas
+            document.addEventListener('DOMContentLoaded', function() {
+                // Ocultar todas as seções condicionais por padrão
+                const conditionalSections = document.querySelectorAll('.conditional-section');
+                conditionalSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                
+                // Manipulador para mostrar/ocultar seção de cônjuge
+                const hasSpouseYes = document.getElementById('has-spouse-yes');
+                const hasSpouseNo = document.getElementById('has-spouse-no');
+                const spouseSection = document.getElementById('spouse-section');
+                
+                if (hasSpouseYes && hasSpouseNo && spouseSection) {
+                    hasSpouseYes.addEventListener('change', function() {
+                        if (this.checked) {
+                            spouseSection.style.display = 'block';
+                        }
+                    });
+                    
+                    hasSpouseNo.addEventListener('change', function() {
+                        if (this.checked) {
+                            spouseSection.style.display = 'none';
+                        }
+                    });
+                }
+                
+                // Manipulador para mostrar/ocultar seção de filhos
+                const hasChildrenYes = document.getElementById('has-children-yes');
+                const hasChildrenNo = document.getElementById('has-children-no');
+                const childrenSection = document.getElementById('children-section');
+                
+                if (hasChildrenYes && hasChildrenNo && childrenSection) {
+                    hasChildrenYes.addEventListener('change', function() {
+                        if (this.checked) {
+                            childrenSection.style.display = 'block';
+                        }
+                    });
+                    
+                    hasChildrenNo.addEventListener('change', function() {
+                        if (this.checked) {
+                            childrenSection.style.display = 'none';
+                        }
+                    });
+                }
+                
+                // Manipuladores para outras seções condicionais já existentes
+                setupConditionalSections();
+            });
+            
+            // Inicializar seções condicionais após resetar o formulário
+            document.addEventListener('DOMContentLoaded', function() {
+                // Reinicializador para garantir que event listeners serão registrados novamente após resetar o formulário
+                function reinitializeConditionalSections() {
+                    console.log("Reinicializando seções condicionais");
+                    
+                    // Referências aos elementos
+                    const hasChildrenYes = document.getElementById('has-children-yes');
+                    const hasChildrenNo = document.getElementById('has-children-no');
+                    const childrenSection = document.getElementById('children-section');
+                    
+                    const hasSpouseYes = document.getElementById('has-spouse-yes');
+                    const hasSpouseNo = document.getElementById('has-spouse-no');
+                    const spouseSection = document.getElementById('spouse-section');
+                    
+                    const hasInsuranceYes = document.getElementById('has-insurance-yes');
+                    const hasInsuranceNo = document.getElementById('has-insurance-no');
+                    const insuranceSection = document.getElementById('insurance-section');
+                    
+                    const hasRetirementYes = document.getElementById('has-retirement-yes');
+                    const hasRetirementNo = document.getElementById('has-retirement-no');
+                    const retirementSection = document.getElementById('retirement-section');
+                    
+                    const hasInvestmentYes = document.getElementById('has-investment-yes');
+                    const hasInvestmentNo = document.getElementById('has-investment-no');
+                    const investmentSection = document.getElementById('investment-section');
+                    
+                    const houseOwn = document.getElementById('house-own');
+                    const houseRent = document.getElementById('house-rent');
+                    const mortgageSection = document.getElementById('mortgage-section');
+                    
+                    const hasMortgageYes = document.getElementById('has-mortgage-yes');
+                    const hasMortgageNo = document.getElementById('has-mortgage-no');
+                    const mortgageValueSection = document.getElementById('mortgage-value-section');
+                    
+                    // Adicionar event listeners para o cônjuge
+                    if (hasSpouseYes && spouseSection) {
+                        hasSpouseYes.addEventListener('change', function() {
+                            if (this.checked) {
+                                console.log("Mostrando seção de cônjuge");
+                                spouseSection.style.display = 'block';
+                            }
+                        });
+                    }
+                    
+                    if (hasSpouseNo && spouseSection) {
+                        hasSpouseNo.addEventListener('change', function() {
+                            if (this.checked) {
+                                console.log("Ocultando seção de cônjuge");
+                                spouseSection.style.display = 'none';
+                            }
+                        });
+                    }
+                    
+                    // Adicionar event listeners para os filhos
+                    if (hasChildrenYes && childrenSection) {
+                        hasChildrenYes.addEventListener('change', function() {
+                            if (this.checked) {
+                                console.log("Mostrando seção de filhos");
+                                childrenSection.style.display = 'block';
+                                updateChildrenForms();
+                            }
+                        });
+                    }
+                    
+                    if (hasChildrenNo && childrenSection) {
+                        hasChildrenNo.addEventListener('change', function() {
+                            if (this.checked) {
+                                console.log("Ocultando seção de filhos");
+                                childrenSection.style.display = 'none';
+                            }
+                        });
+                    }
+                    
+                    // Adicionar event listeners para seguro
+                    if (hasInsuranceYes && insuranceSection) {
+                        hasInsuranceYes.addEventListener('change', function() {
+                            if (this.checked) {
+                                console.log("Mostrando seção de seguro");
+                                insuranceSection.style.display = 'block';
+                            }
+                        });
+                    }
+                    
+                    if (hasInsuranceNo && insuranceSection) {
+                        hasInsuranceNo.addEventListener('change', function() {
+                            if (this.checked) {
+                                console.log("Ocultando seção de seguro");
+                                insuranceSection.style.display = 'none';
+                            }
+                        });
+                    }
+                    
+                    // Adicionar event listeners para aposentadoria
+                    if (hasRetirementYes && retirementSection) {
+                        hasRetirementYes.addEventListener('change', function() {
+                            if (this.checked) {
+                                console.log("Mostrando seção de aposentadoria");
+                                retirementSection.style.display = 'block';
+                            }
+                        });
+                    }
+                    
+                    if (hasRetirementNo && retirementSection) {
+                        hasRetirementNo.addEventListener('change', function() {
+                            if (this.checked) {
+                                console.log("Ocultando seção de aposentadoria");
+                                retirementSection.style.display = 'none';
+                            }
+                        });
+                    }
+                    
+                    // Adicionar event listeners para investimento
+                    if (hasInvestmentYes && investmentSection) {
+                        hasInvestmentYes.addEventListener('change', function() {
+                            if (this.checked) {
+                                console.log("Mostrando seção de investimento");
+                                investmentSection.style.display = 'block';
+                            }
+                        });
+                    }
+                    
+                    if (hasInvestmentNo && investmentSection) {
+                        hasInvestmentNo.addEventListener('change', function() {
+                            if (this.checked) {
+                                console.log("Ocultando seção de investimento");
+                                investmentSection.style.display = 'none';
+                            }
+                        });
+                    }
+                    
+                    // Adicionar event listeners para casa própria/alugada
+                    if (houseOwn && mortgageSection) {
+                        houseOwn.addEventListener('change', function() {
+                            if (this.checked) {
+                                console.log("Mostrando seção de mortgage (casa própria)");
+                                mortgageSection.style.display = 'block';
+                            }
+                        });
+                    }
+                    
+                    if (houseRent && mortgageSection) {
+                        houseRent.addEventListener('change', function() {
+                            if (this.checked) {
+                                console.log("Ocultando seção de mortgage (casa alugada)");
+                                mortgageSection.style.display = 'none';
+                            }
+                        });
+                    }
+                    
+                    // Adicionar event listeners para mortgage
+                    if (hasMortgageYes && mortgageValueSection) {
+                        hasMortgageYes.addEventListener('change', function() {
+                            if (this.checked) {
+                                console.log("Mostrando seção de valor do mortgage");
+                                mortgageValueSection.style.display = 'block';
+                            }
+                        });
+                    }
+                    
+                    if (hasMortgageNo && mortgageValueSection) {
+                        hasMortgageNo.addEventListener('change', function() {
+                            if (this.checked) {
+                                console.log("Ocultando seção de valor do mortgage");
+                                mortgageValueSection.style.display = 'none';
+                            }
+                        });
+                    }
+                    
+                    // Verificar estado inicial de todas as seções condicionais
+                    // Cônjuge
+                    if (hasSpouseYes && hasSpouseYes.checked && spouseSection) {
+                        spouseSection.style.display = 'block';
+                    } else if (spouseSection) {
+                        spouseSection.style.display = 'none';
+                    }
+                    
+                    // Filhos
+                    if (hasChildrenYes && hasChildrenYes.checked && childrenSection) {
+                        childrenSection.style.display = 'block';
+                        updateChildrenForms();
+                    } else if (childrenSection) {
+                        childrenSection.style.display = 'none';
+                    }
+                    
+                    // Seguro
+                    if (hasInsuranceYes && hasInsuranceYes.checked && insuranceSection) {
+                        insuranceSection.style.display = 'block';
+                    } else if (insuranceSection) {
+                        insuranceSection.style.display = 'none';
+                    }
+                    
+                    // Aposentadoria
+                    if (hasRetirementYes && hasRetirementYes.checked && retirementSection) {
+                        retirementSection.style.display = 'block';
+                    } else if (retirementSection) {
+                        retirementSection.style.display = 'none';
+                    }
+                    
+                    // Investimento
+                    if (hasInvestmentYes && hasInvestmentYes.checked && investmentSection) {
+                        investmentSection.style.display = 'block';
+                    } else if (investmentSection) {
+                        investmentSection.style.display = 'none';
+                    }
+                    
+                    // Casa própria/mortgage
+                    if (houseOwn && houseOwn.checked && mortgageSection) {
+                        mortgageSection.style.display = 'block';
+                        
+                        // Verificar submenu de mortgage
+                        if (hasMortgageYes && hasMortgageYes.checked && mortgageValueSection) {
+                            mortgageValueSection.style.display = 'block';
+                        } else if (mortgageValueSection) {
+                            mortgageValueSection.style.display = 'none';
+                        }
+                    } else if (mortgageSection) {
+                        mortgageSection.style.display = 'none';
+                    }
+                }
+                
+                // Executar na inicialização
+                reinitializeConditionalSections();
+                
+                // Anexar ao resetFormCompletely
+                const originalResetFormCompletely = resetFormCompletely;
+                resetFormCompletely = function() {
+                    originalResetFormCompletely();
+                    
+                    // Adicionar um pequeno atraso para garantir que o DOM foi atualizado
+                    setTimeout(reinitializeConditionalSections, 100);
+                };
+            });
+            
+            // Função de formatação monetária para inputs com a classe currency-input
+        });
+    </script>
+</body>
+<!-- Adicionar o overlay de carregamento antes do fechamento do body -->
+<div class="loading-overlay" id="loading-overlay">
+    <div class="loading-spinner">
+        <div class="spinner"></div>
+    </div>
+</div>
+</html>
